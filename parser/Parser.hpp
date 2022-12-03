@@ -5,11 +5,13 @@
 
 using namespace std;
 
+typedef function<
+        void(const string &val)
+> FUNC;
+
 template<typename T>
 class Parser {
     private:
-        ifstream _input;
-
         auto _getInput() -> vector<string> {
             vector<string> in;
             string line;
@@ -22,6 +24,10 @@ class Parser {
             return in;
         }
 
+        ifstream _input;
+        T _cache;
+        vector<string> _in;
+
     public:
         explicit Parser(const char *file) {
             _input.open(file, ios::in);
@@ -30,17 +36,24 @@ class Parser {
                     "Error while opening input!"
                     << endl;
             }
+            _in = _getInput();
         }
 
-        auto edit(function<
-                    void(const string &val)
-                > f) {
-            auto in = _getInput();
-            std::for_each(in.begin(),
-                          in.end(),
+        auto edit(FUNC f) {
+            std::for_each(_in.begin(),
+                          _in.end(),
                           std::move(f));
         }
 
-        virtual T editState() = 0;
-        virtual void result() = 0;
+        T *getCache() {
+            return &_cache;
+        }
+
+        virtual void cacheRes(T r) {
+            _cache = r;
+        }
+
+        virtual void firstFragment() = 0;
+        virtual void secondFragment() = 0;
 };
+

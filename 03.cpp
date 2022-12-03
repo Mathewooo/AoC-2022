@@ -3,7 +3,9 @@
 
 using namespace std;
 
-class DayThree : Parser<int> {
+typedef int TYPE;
+
+class DayThree : Parser<TYPE> {
     private:
         enum PRIORITY : int {
             LOW = 1,
@@ -28,7 +30,9 @@ class DayThree : Parser<int> {
     public:
         explicit DayThree(const char *fileName): Parser(fileName) {}
 
-        int editState() override {
+        using Parser::cacheRes;
+
+        TYPE earlyState() {
             int calc { 0 };
             function<void(string)> F = [&](const string& val){
                 if (val.size() % 2 != 0) return;
@@ -51,8 +55,28 @@ class DayThree : Parser<int> {
             return calc;
         }
 
-        void result() override {
-            cout << DayThree::editState() << endl;
+        TYPE succeedingState() {
+            auto calc { 0 },
+                 index { 0 };
+            vector<string> group;
+            function<void(string)> F = [&](const string& val){
+                index++;
+                if (index >= 3) {
+
+                } else {
+                    group.push_back(val);
+                }
+            };
+            edit(F);
+            return calc;
+        }
+
+        void firstFragment() override {
+
+        }
+
+        void secondFragment() override {
+
         }
 };
 
@@ -60,6 +84,9 @@ int main() {
     auto dayThree = DayThree(
             "../inputs/dayThree"
             );
-    dayThree.result();
+    dayThree.cacheRes(dayThree.earlyState());
+    dayThree.firstFragment();
+    dayThree.cacheRes(dayThree.succeedingState());
+    dayThree.secondFragment();
     return 0;
 }

@@ -4,7 +4,9 @@
 
 using namespace std;
 
-class DayOne : Parser<vector<int>> {
+typedef vector<int> TYPE;
+
+class DayOne : Parser<TYPE> {
     private:
         struct {
                 bool operator()(int a, int b) const {
@@ -12,41 +14,71 @@ class DayOne : Parser<vector<int>> {
                 }
             } MORE;
 
+        static auto _slice(vector<int> const *v,
+                    int x, int y) -> vector<int> {
+            auto first = v->begin() + x;
+            auto last = v->begin() + y + 1;
+            vector<int> vector(first, last);
+            return vector;
+        }
+
     public:
         explicit DayOne(const char *fileName): Parser(fileName) {}
 
-        vector<int> editState() override {
+        using Parser::cacheRes;
+
+        TYPE editState() {
             vector<int> cals;
-            int calc { 0 };
-            function<void(string)> F = [&](const string& val){
+            int calc;
+            FUNC f = [&](const string& val){
                 if (val.empty()) {
                     cals.push_back(calc),
                     calc = 0;
                 } else calc += stoi(val);
             };
-            edit(F);
-            return cals;
-        }
-
-        void result() override {
-            vector<int> cals{
-                DayOne::editState()
-            };
-
+            edit(f);
             sort(cals.begin(),
                  cals.end(),
                  MORE);
+            return cals;
+        }
 
-            for (int i = 0; i < 3; ++i) {
+        void firstFragment() override {
+            const auto cals{
+                    getCache()
+            };
+
+            cout << "First Fragment:"
+                << endl << endl;
+
+            cout << "Total: " << cals->at(0)
+                << endl << endl;
+        }
+
+        void secondFragment() override {
+            const auto cals{
+                _slice(getCache(), 0, 2)
+            };
+
+            cout << "Second Fragment:"
+                << endl << endl;
+
+            int index {0}, total {0};
+            for (auto &i : cals) {
                 cout <<
-                     (i + 1) << ". " << cals.at(i)
+                     (++index) << ". " << i
                      << endl;
+                total += i;
             }
+
+            cout << endl << "Total: " << total << endl;
         }
 };
 
 int main() {
     auto dayOne = DayOne("../inputs/dayOne");
-    dayOne.result();
+    dayOne.cacheRes(dayOne.editState());
+    dayOne.firstFragment();
+    dayOne.secondFragment();
     return 0;
 }
