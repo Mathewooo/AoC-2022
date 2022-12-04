@@ -1,3 +1,3 @@
 # Aoc-2022
 
-My solutions for Advent of Code 2O22 (https://adventofcode.com/)
+My solutions for Advent of Code 2022 (https://adventofcode.com/)
