@@ -13,7 +13,8 @@ class DayThree : Parser<TYPE> {
             HIGH = 27
         };
 
-        static auto _determinePriority(const char cr) -> uint8_t {
+        inline static auto _determinePriority(const char cr
+                ) -> uint8_t {
             return islower(cr)
                     ? Priority::LOW + cr - 'a'
                     : Priority::HIGH + cr - 'A';
@@ -32,7 +33,7 @@ class DayThree : Parser<TYPE> {
         struct TUPLE {
             string *arr = new string[N];
 
-            [[nodiscard]] string* get(const int index) const {
+            string* get(const int index) const {
                 return &(arr[index]);
             }
 

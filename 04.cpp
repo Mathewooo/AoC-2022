@@ -29,6 +29,11 @@ class DayFour : Parser<TYPE> {
             return {iter, end};
         }
 
+        inline static int _toInt(const vector<string> &v,
+                                 int index) {
+            return stoi(v.at(index));
+        }
+
         static auto returnPair(const pair<string, string> &pr) {
             pair<PAIR, PAIR> pair;
             auto f { _split(pr.first) },
@@ -43,24 +48,20 @@ class DayFour : Parser<TYPE> {
             return pair;
         }
 
-        static int _toInt(const vector<string> &v, int index) {
-            return stoi(v.at(index));
-        }
-
-        static constexpr auto _contains(
+        static auto _contain(
                 const PAIR &e1, const PAIR &e2) -> bool {
             return e1.first <= e2.first
                 && e1.second >= e2.second;
         }
 
-        static constexpr auto _contain(
+        inline static auto _contains(
                 const pair<PAIR, PAIR> &elfPair) -> bool {
             const auto& [e1, e2] = elfPair;
-            return _contains(e1, e2)
-                || _contains(e2, e1);
+            return _contain(e1, e2)
+                || _contain(e2, e1);
         }
 
-        static constexpr auto _overlap(const pair<PAIR, PAIR> &elfPair) -> bool {
+        inline static auto _overlap(const pair<PAIR, PAIR> &elfPair) -> bool {
             const auto& [e1, e2] = elfPair;
             return e1.second >= e2.first
                 && e1.first <= e2.second;
@@ -78,7 +79,7 @@ class DayFour : Parser<TYPE> {
                         _getOutputs(&val, ",")
                 };
                 auto elfPair { returnPair(out) };
-                if (_contain(elfPair)) {
+                if (_contains(elfPair)) {
                     calc += 1;
                 }
             }; { edit(f); }
@@ -120,8 +121,8 @@ class DayFour : Parser<TYPE> {
 int main() {
     auto main = DayFour("../inputs/dayFour");
     main
-        .cacheRes(main
-        .editState());
+      .cacheRes(main
+      .editState());
     main.firstFragment();
     main
       .cacheRes(main

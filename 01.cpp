@@ -14,7 +14,7 @@ class DayOne : Parser<TYPE> {
             }
         } MORE;
 
-        static auto _slice(vector<int> const *v,
+        inline static auto _slice(vector<int> const *v,
                     int x, int y) -> vector<int> {
             auto first = v->begin() + x;
             auto last = v->begin() + y + 1;
