@@ -9,10 +9,10 @@ typedef vector<int> TYPE;
 class DayOne : Parser<TYPE> {
     private:
         struct {
-                bool operator()(int a, int b) const {
-                    return a > b;
-                }
-            } MORE;
+            bool operator()(int a, int b) const {
+                return a > b;
+            }
+        } MORE;
 
         static auto _slice(vector<int> const *v,
                     int x, int y) -> vector<int> {
@@ -76,9 +76,11 @@ class DayOne : Parser<TYPE> {
 };
 
 int main() {
-    auto dayOne = DayOne("../inputs/dayOne");
-    dayOne.cacheRes(dayOne.editState());
-    dayOne.firstFragment();
-    dayOne.secondFragment();
-    return 0;
+    auto main = DayOne("../inputs/dayOne");
+    main
+      .cacheRes(main
+      .editState());
+    main.firstFragment();
+    main.secondFragment();
+    return EXIT_SUCCESS;
 }

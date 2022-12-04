@@ -40,9 +40,10 @@ class Parser {
         }
 
         auto edit(FUNC f) {
-            std::for_each(_in.begin(),
-                          _in.end(),
-                          std::move(f));
+            const auto in = _in;
+            for_each(in.begin(),
+                     in.end(),
+                       std::move(f));
         }
 
         T *getCache() {

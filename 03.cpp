@@ -1,4 +1,5 @@
 #include <vector>
+#include <set>
 #include "parser/Parser.hpp"
 
 using namespace std;
@@ -7,15 +8,15 @@ typedef int TYPE;
 
 class DayThree : Parser<TYPE> {
     private:
-        enum PRIORITY : int {
+        enum Priority : int {
             LOW = 1,
             HIGH = 27
         };
 
         static auto _determinePriority(const char cr) -> uint8_t {
             return islower(cr)
-                    ? PRIORITY::LOW + cr - 'a'
-                    : PRIORITY::HIGH + cr - 'A';
+                    ? Priority::LOW + cr - 'a'
+                    : Priority::HIGH + cr - 'A';
         }
 
         static auto _getCompartments(
@@ -27,6 +28,24 @@ class DayThree : Parser<TYPE> {
             };
         }
 
+        template<int N>
+        struct TUPLE {
+            string *arr = new string[N];
+
+            [[nodiscard]] string* get(const int index) const {
+                return &(arr[index]);
+            }
+
+            auto set(const int *index,
+                     const string& val) {
+                arr[*index] = val;
+            }
+        };
+
+        enum Val : int {
+            first = 0, second = 1, third = 2
+        };
+
     public:
         explicit DayThree(const char *fileName): Parser(fileName) {}
 
@@ -34,7 +53,7 @@ class DayThree : Parser<TYPE> {
 
         TYPE earlyState() {
             int calc { 0 };
-            function<void(string)> F = [&](const string& val){
+            auto F = [&](const string& val){
                 if (val.size() % 2 != 0) return;
                 const auto ctSize {
                     static_cast<int>(val.size() / 2)
@@ -50,43 +69,65 @@ class DayThree : Parser<TYPE> {
                         calc += _determinePriority(cr);
                     }
                 }
-            };
-            edit(F);
+            }; { edit(F); }
             return calc;
         }
 
         TYPE succeedingState() {
-            auto calc { 0 },
-                 index { 0 };
-            vector<string> group;
-            function<void(string)> F = [&](const string& val){
-                index++;
-                if (index >= 3) {
-
-                } else {
-                    group.push_back(val);
+            auto calc {0},
+                 index {0};
+            TUPLE<3> group;
+            auto F = [&](const string& val){
+                group.set(&index, val);
+                ++index;
+                if (index > 2) {
+                    const auto first = group.get(Val::first),
+                         second = group.get(Val::second),
+                         third = group.get(Val::third);
+                    char temp {0};
+                    for (auto &cr : *first) {
+                        if ((second->contains(cr)
+                            && third->contains(cr))
+                            && cr != temp) {
+                            temp = cr;
+                            calc += _determinePriority(cr);
+                        }
+                    }
+                    group = {}, index = 0;
                 }
-            };
-            edit(F);
+            }; { edit(F); }
             return calc;
         }
 
         void firstFragment() override {
+            cout << "First Fragment:"
+                 << endl << endl;
 
+            cout << "Total: " << *getCache()
+                 << endl
+                 << endl;
         }
 
         void secondFragment() override {
+            cout << "Second Fragment:"
+                 << endl << endl;
 
+            cout << "Total: " << *getCache()
+                 << endl;
         }
 };
 
 int main() {
-    auto dayThree = DayThree(
+    auto main = DayThree(
             "../inputs/dayThree"
             );
-    dayThree.cacheRes(dayThree.earlyState());
-    dayThree.firstFragment();
-    dayThree.cacheRes(dayThree.succeedingState());
-    dayThree.secondFragment();
-    return 0;
+    main
+      .cacheRes(main
+      .earlyState()),
+    main.firstFragment(),
+    main
+      .cacheRes(main
+      .succeedingState()),
+    main.secondFragment();
+    return EXIT_SUCCESS;
 }
