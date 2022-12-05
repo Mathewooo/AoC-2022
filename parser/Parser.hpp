@@ -43,7 +43,7 @@ class Parser {
             const auto in = _in;
             for_each(in.begin(),
                      in.end(),
-                     std::move(f));
+                       std::move(f));
         }
 
         T *getCache() {

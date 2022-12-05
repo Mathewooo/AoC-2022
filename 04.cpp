@@ -3,8 +3,8 @@
 
 using namespace std;
 
-typedef int TYPE;
 typedef pair<int, int> PAIR;
+typedef vector<pair<PAIR, PAIR>> TYPE;
 
 class DayFour : Parser<TYPE> {
     private:
@@ -34,10 +34,12 @@ class DayFour : Parser<TYPE> {
             return stoi(v.at(index));
         }
 
-        static auto returnPair(const pair<string, string> &pr) {
+        static auto returnPair(
+                    const pair<string, string> &pr
+                ) -> pair<PAIR, PAIR> {
             pair<PAIR, PAIR> pair;
             auto f { _split(pr.first) },
-                    s { _split(pr.second) };
+                 s { _split(pr.second) };
             pair.first = {
                     _toInt(f, 0),
                     _toInt(f, 1)
@@ -73,47 +75,47 @@ class DayFour : Parser<TYPE> {
         using Parser::cacheRes;
 
         TYPE editState() {
-            auto calc {0};
+            vector<pair<PAIR, PAIR>> v;
             FUNC f = [&](const string& val){
                 const pair<string, string> out = {
                         _getOutputs(&val, ",")
                 };
                 auto elfPair { returnPair(out) };
-                if (_contains(elfPair)) {
-                    calc += 1;
-                }
+                v.push_back(elfPair);
             }; { edit(f); }
-            return calc;
-        }
-
-        TYPE succeedingState() {
-            auto calc {0};
-            FUNC f = [&](const string& val){
-                const pair<string, string> out = {
-                        _getOutputs(&val, ",")
-                };
-                auto elfPair { returnPair(out) };
-                if (_overlap(elfPair)) {
-                    calc += 1;
-                }
-            }; { edit(f); }
-            return calc;
+            return v;
         }
 
         void firstFragment() override {
+            auto calc{0};
+
+            for (const auto &pair : *getCache()) {
+                if (_contains(pair)) {
+                    calc += 1;
+                }
+            }
+
             cout << "First Fragment:"
                  << endl << endl;
 
-            cout << "Total: " << *getCache()
+            cout << "Total: " << calc
                  << endl
                  << endl;
         }
 
         void secondFragment() override {
+            auto calc{0};
+
+            for (const auto &pair : *getCache()) {
+                if (_overlap(pair)) {
+                    calc += 1;
+                }
+            }
+
             cout << "Second Fragment:"
                  << endl << endl;
 
-            cout << "Total: " << *getCache()
+            cout << "Total: " << calc
                  << endl;
         }
 };
@@ -124,9 +126,6 @@ int main() {
       .cacheRes(main
       .editState());
     main.firstFragment();
-    main
-      .cacheRes(main
-      .succeedingState());
     main.secondFragment();
     return EXIT_SUCCESS;
 }

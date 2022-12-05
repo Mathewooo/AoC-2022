@@ -35,8 +35,7 @@ class DayOne : Parser<TYPE> {
                     cals.push_back(calc),
                     calc = 0;
                 } else calc += stoi(val);
-            };
-            edit(f);
+            }; { edit(f); }
             sort(cals.begin(),
                  cals.end(),
                  MORE);

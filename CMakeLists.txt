@@ -3,4 +3,4 @@ project(CodeAdvent)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(CodeAdvent 04.cpp)
+add_executable(CodeAdvent 06.cpp)
