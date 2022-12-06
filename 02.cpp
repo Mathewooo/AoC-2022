@@ -17,10 +17,10 @@ private:
         const auto pos{val->find(delimiter)};
         return {
             val->substr(0, pos)
-                        .c_str()[0],
+                        .at(0),
             val->substr(pos + delimiter.length(),
                         val->size())
-                        .c_str()[0]
+                        .at(0)
         };
     }
 

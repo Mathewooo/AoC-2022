@@ -6,15 +6,19 @@
 using namespace std;
 
 typedef string TYPE;
-typedef vector<vector<char>> STACKS;
 
 class DayOne : Parser<TYPE> {
     private:
+        pair<vector<string>, vector<string>> _in {
+                _splittedInput()
+        };
+        vector<vector<char>> _stacks;
+
         inline auto _splittedInput() -> pair<vector<string>, vector<string>> {
             vector<string> stacks,
                            instructions;
             bool afterSpace {false};
-            auto f = [&](const string& val){
+            auto F = [&](const string& val){
                 if (val.empty()) {
                     afterSpace = true;
                     return;
@@ -22,63 +26,63 @@ class DayOne : Parser<TYPE> {
                 if (!afterSpace && !val.empty()) {
                     stacks.push_back(val);
                 } else instructions.push_back(val);
-            }; { edit(f); }
+            }; { edit(F); }
             return {
                 stacks,
                 instructions
             };
         }
 
-        auto _initializeStacks(const vector<string> &input,
-                               STACKS &stacks) {
-            auto in {input};
+        inline auto _initStacks() {
+            auto in {&_in.first};
             auto stackIndexes {
-                    in.back()
+                    in->back()
             };
 
-            reverse(in.begin(),
-                    in.end());
+            reverse(in->begin(),
+                    in->end());
 
             for (int i = 0; i < stackIndexes.length(); ++i) {
                 if (!isblank(stackIndexes[i])) {
                     vector<char> currentItems;
-                    for (int j = 1; j < in.size(); ++j) {
-                        auto row {
-                                in[j]
-                        };
-                        auto index {0};
-                        while (index < i) ++index;
+                    for (int j = 1; j < in->size(); ++j) {
                         const auto crate{
-                                row.c_str()[index]
+                                in->at(j).at(i)
                         };
-                        if (index == i && !isblank(crate)) {
+                        if (!isblank(crate)) {
                             currentItems.push_back(
                                     crate
                             );
                         }
                     }
-                    stacks.push_back(currentItems);
+                    _stacks.push_back(currentItems);
                 }
             }
         }
 
-        pair<vector<string>, vector<string>> _in {
-                _splittedInput()
-        };
+        auto _returnRes(const vector<vector<char>> &stacks) -> string {
+            string res;
+            for (auto &cr : stacks) {
+                res.push_back(cr
+                   .back());
+            }
+            return res;
+        }
 
     public:
         explicit DayOne(const char *fileName): Parser(fileName) {}
 
         using Parser::cacheRes;
 
+        auto initStacks() {
+            _initStacks();
+        }
+
         TYPE editState() {
-            string res {""};
-            vector<vector<char>> stacks; {
-                _initializeStacks(_in.first, stacks);
-            }
+            auto stacks {_stacks};
 
             for (const auto& instruction : _in.second) {
-                int num {0}, from {0}, to {0};
+                auto num {0}, from {0}, to {0};
                 sscanf(instruction.c_str(),
                        "move %d from %d to %d",
                        &num, &from, &to);
@@ -89,22 +93,14 @@ class DayOne : Parser<TYPE> {
                 }
             }
 
-            for (auto &vl : stacks) {
-                res.push_back(vl
-                   .back());
-            }
-
-            return res;
+            return _returnRes(stacks);
         }
 
         TYPE succeedingState() {
-            string res {""};
-            vector<vector<char>> stacks; {
-                _initializeStacks(_in.first, stacks);
-            }
+            auto stacks {_stacks};
 
             for (const auto& instruction : _in.second) {
-                int num {0}, from {0}, to {0};
+                auto num {0}, from {0}, to {0};
                 sscanf(instruction.c_str(),
                        "move %d from %d to %d",
                        &num, &from, &to);
@@ -120,12 +116,7 @@ class DayOne : Parser<TYPE> {
                 );
             }
 
-            for (auto &vl : stacks) {
-                res.push_back(vl
-                   .back());
-            }
-
-            return res;
+            return _returnRes(stacks);
         }
 
         void firstFragment() override {
@@ -148,6 +139,7 @@ class DayOne : Parser<TYPE> {
 
 int main() {
     auto main = DayOne("../inputs/dayFive");
+    main.initStacks();
     main
       .cacheRes(main
       .editState());

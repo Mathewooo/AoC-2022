@@ -34,7 +34,7 @@ class DayFour : Parser<TYPE> {
             return stoi(v.at(index));
         }
 
-        static auto returnPair(
+        static auto _returnPair(
                     const pair<string, string> &pr
                 ) -> pair<PAIR, PAIR> {
             pair<PAIR, PAIR> pair;
@@ -63,7 +63,8 @@ class DayFour : Parser<TYPE> {
                 || _contain(e2, e1);
         }
 
-        inline static auto _overlap(const pair<PAIR, PAIR> &elfPair) -> bool {
+        inline static auto _overlap(
+                const pair<PAIR, PAIR> &elfPair) -> bool {
             const auto& [e1, e2] = elfPair;
             return e1.second >= e2.first
                 && e1.first <= e2.second;
@@ -76,13 +77,13 @@ class DayFour : Parser<TYPE> {
 
         TYPE editState() {
             vector<pair<PAIR, PAIR>> v;
-            FUNC f = [&](const string& val){
+            FUNC F = [&](const string& val){
                 const pair<string, string> out = {
                         _getOutputs(&val, ",")
                 };
-                auto elfPair { returnPair(out) };
+                auto elfPair { _returnPair(out) };
                 v.push_back(elfPair);
-            }; { edit(f); }
+            }; { edit(F); }
             return v;
         }
 

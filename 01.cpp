@@ -30,12 +30,12 @@ class DayOne : Parser<TYPE> {
         TYPE editState() {
             vector<int> cals;
             int calc;
-            FUNC f = [&](const string& val){
+            FUNC F = [&](const string& val){
                 if (val.empty()) {
                     cals.push_back(calc),
                     calc = 0;
                 } else calc += stoi(val);
-            }; { edit(f); }
+            }; { edit(F); }
             sort(cals.begin(),
                  cals.end(),
                  MORE);
