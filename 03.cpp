@@ -4,15 +4,33 @@
 
 using namespace std;
 
+enum Priority : int {
+    LOW = 1,
+    HIGH = 27
+};
+
+enum Val : int {
+    first = 0, second = 1, third = 2
+};
+
+template<int N>
+struct TUPLE {
+    string *arr = new string[N];
+
+    string* get(const int index) const {
+        return &(arr[index]);
+    }
+
+    auto set(const int *index,
+             const string& val) {
+        arr[*index] = val;
+    }
+};
+
 typedef int TYPE;
 
 class DayThree : Parser<TYPE> {
     private:
-        enum Priority : int {
-            LOW = 1,
-            HIGH = 27
-        };
-
         inline static auto _determinePriority(const char cr
                 ) -> uint8_t {
             return islower(cr)
@@ -28,24 +46,6 @@ class DayThree : Parser<TYPE> {
                 vl.substr(*size)
             };
         }
-
-        template<int N>
-        struct TUPLE {
-            string *arr = new string[N];
-
-            string* get(const int index) const {
-                return &(arr[index]);
-            }
-
-            auto set(const int *index,
-                     const string& val) {
-                arr[*index] = val;
-            }
-        };
-
-        enum Val : int {
-            first = 0, second = 1, third = 2
-        };
 
     public:
         explicit DayThree(const char *fileName): Parser(fileName) {}

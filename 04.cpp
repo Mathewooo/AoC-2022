@@ -1,7 +1,9 @@
 #include <regex>
 #include "parser/Parser.hpp"
+#include "utilities/Utils.hpp"
 
 using namespace std;
+using namespace Regex;
 
 typedef pair<int, int> PAIR;
 typedef vector<pair<PAIR, PAIR>> TYPE;
@@ -18,17 +20,6 @@ class DayFour : Parser<TYPE> {
             };
         }
 
-        static auto _split(const string &str,
-                               const regex &reg = regex{"\\-+"}) -> vector<string> {
-            sregex_token_iterator iter(
-                    str.begin(),
-                    str.end(),
-                    reg, -1
-                    );
-            sregex_token_iterator end;
-            return {iter, end};
-        }
-
         inline static int _toInt(const vector<string> &v,
                                  int index) {
             return stoi(v.at(index));
@@ -38,8 +29,9 @@ class DayFour : Parser<TYPE> {
                     const pair<string, string> &pr
                 ) -> pair<PAIR, PAIR> {
             pair<PAIR, PAIR> pair;
-            auto f { _split(pr.first) },
-                 s { _split(pr.second) };
+            const auto reg {regex{"\\-+"}};
+            auto f {split(pr.first, reg)},
+                 s {split(pr.second, reg)};
             pair.first = {
                     _toInt(f, 0),
                     _toInt(f, 1)
@@ -77,7 +69,7 @@ class DayFour : Parser<TYPE> {
 
         TYPE editState() {
             vector<pair<PAIR, PAIR>> v;
-            FUNC F = [&](const string& val){
+            FUNC F = [&](const string& val) {
                 const pair<string, string> out = {
                         _getOutputs(&val, ",")
                 };

@@ -4,14 +4,14 @@
 
 using namespace std;
 
+enum Res : int {
+    WIN = 6, LOSE = 0, TIE = 3
+};
+
 typedef int TYPE;
 
 class DayTwo : Parser<TYPE> {
 private:
-    enum Res : int {
-        WIN = 6, LOSE = 0, TIE = 3
-    };
-
     static auto _getOutputs(const string *val,
                             const string &delimiter) -> pair<char, char> {
         const auto pos{val->find(delimiter)};

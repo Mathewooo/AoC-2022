@@ -45,9 +45,10 @@ class DayOne : Parser<TYPE> {
             for (int i = 0; i < stackIndexes.length(); ++i) {
                 if (!isblank(stackIndexes[i])) {
                     vector<char> currentItems;
-                    for (int j = 1; j < in->size(); ++j) {
+                    auto index {0};
+                    while (++index < in->size()) {
                         const auto crate{
-                                in->at(j).at(i)
+                                in->at(index).at(i)
                         };
                         if (!isblank(crate)) {
                             currentItems.push_back(

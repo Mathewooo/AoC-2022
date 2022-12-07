@@ -33,7 +33,7 @@ class DaySix : Parser<TYPE> {
             return in;
         }
 
-        string _in {_initInput()};
+        const string _in {_initInput()};
 
     public:
         explicit DaySix(const char *fileName): Parser(fileName) {}

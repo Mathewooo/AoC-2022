@@ -4,16 +4,16 @@
 
 using namespace std;
 
+struct {
+    bool operator()(int a, int b) const {
+        return a > b;
+    }
+} MORE;
+
 typedef vector<int> TYPE;
 
 class DayOne : Parser<TYPE> {
     private:
-        struct {
-            bool operator()(int a, int b) const {
-                return a > b;
-            }
-        } MORE;
-
         inline static auto _slice(vector<int> const *v,
                     int x, int y) -> vector<int> {
             auto first = v->begin() + x;
