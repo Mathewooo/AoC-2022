@@ -12,6 +12,16 @@ typedef int TYPE;
 
 class DayNine : Parser<TYPE> {
     private:
+        auto _execute(function<void(char direction)> f) {
+            auto F = [&](const string& val){
+                auto out = split(val,
+                                 regex{"\\ +"});
+                const char direction{out[0][0]};
+                int steps{stoi(out[1])};
+                while (steps-- > 0) f(direction);
+            }; { edit(F); }
+        }
+
         auto _sign(int v) {
             return (v > 0) - (v < 0);
         }
@@ -47,17 +57,17 @@ class DayNine : Parser<TYPE> {
         TYPE earlyState() {
             Pos head, tail;
             set<Pos> tailPositions{tail};
-            auto F = [&](const string& val){
-                auto out = split(val,
-                                 regex{"\\ +"});
-                const char direction{out[0][0]};
-                int steps{stoi(out[1])};
-                while (steps-- > 0) {
+
+            auto f {
+                [&tail, &head, &tailPositions, this](char direction) {
                     _moveHead(direction, head);
                     _moveTail(head, tail);
                     tailPositions.insert(tail);
                 }
-            }; { edit(F); }
+            };
+
+            _execute(f);
+
             return tailPositions.size();
         }
 
@@ -66,19 +76,19 @@ class DayNine : Parser<TYPE> {
             array<Pos, dim> rope;
             Pos &head{rope[0]}, &tail{rope[dim - 1]};
             set<Pos> tailPositions{tail};
-            auto F = [&](const string& val){
-                auto out = split(val,
-                                 regex{"\\ +"});
-                const char direction{out[0][0]};
-                int steps{stoi(out[1])};
-                while (steps-- > 0) {
+
+            auto f {
+                [&tail, &head, &rope, &tailPositions, this](char direction) {
                     _moveHead(direction, head);
                     for (size_t i = 0; i < dim - 1; ++i) {
                         _moveTail(rope[i], rope[i + 1]);
                     }
                     tailPositions.insert(tail);
                 }
-            }; { edit(F); }
+            };
+
+            _execute(f);
+
             return tailPositions.size();
         }
 

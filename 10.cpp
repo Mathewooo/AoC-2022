@@ -1,6 +1,7 @@
 #include <numeric>
 #include <sstream>
 #include <array>
+#include <regex>
 #include "parser/Parser.hpp"
 #include "utilities/Utils.hpp"
 
@@ -22,16 +23,14 @@ class DayTen : Parser<TYPE> {
     private:
         auto _execute(int &x, function<void()> tick) {
             auto F = [&](const string& val){
-                if (val.compare(NOOP) == 0) {
+                if (val == NOOP) {
                     tick(); return;
-                }
-                istringstream iss{val};
-                string next; int arg;
-                iss >> next >> arg;
-                if (next.compare(ADDX) == 0) {
+                } else if (auto temp{
+                    split(val, regex{"\\ +"})};
+                        temp[0] == ADDX) {
                     for ([[maybe_unused]] auto i : {1, 2})
                         tick();
-                    x += arg;
+                    x += stoi(temp[1]);
                 }
             }; { edit(F); }
         }
@@ -43,6 +42,7 @@ class DayTen : Parser<TYPE> {
 
         TYPE earlyState() {
             vector<int> cycles; auto x{1};
+
             auto tick = [&cycles, &x]() {
                 cycles.push_back(x);
             };
@@ -64,6 +64,7 @@ class DayTen : Parser<TYPE> {
             array<char, WIDTH * HEIGHT> crt; {
                 crt.fill(DARK);
             }
+
             auto tick = [&crt, &pos, &x]() {
                 if (x - 1 <= (pos % WIDTH)
                     && (pos % WIDTH) <= x + 1) {
