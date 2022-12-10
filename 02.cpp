@@ -29,7 +29,7 @@ public:
 
     using Parser::cacheRes;
 
-    TYPE editState() {
+    TYPE earlyState() {
         int score{0};
         auto F = [&](const string &val) {
             auto vl = val;
@@ -112,7 +112,7 @@ int main() {
     auto main = DayTwo("../inputs/dayTwo");
     main
       .cacheRes(main
-      .editState());
+      .earlyState());
     main.firstFragment();
     main
       .cacheRes(main

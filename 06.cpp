@@ -39,7 +39,7 @@ class DaySix : Parser<TYPE> {
         explicit DaySix(const char *fileName): Parser(fileName) {}
 
         void firstFragment() override {
-            constexpr auto RANGE {4};
+            constexpr auto RANGE{4};
 
             cout << "First Fragment:"
                  << endl << endl;
@@ -51,7 +51,7 @@ class DaySix : Parser<TYPE> {
         }
 
         void secondFragment() override {
-            constexpr auto RANGE {14};
+            constexpr auto RANGE{14};
 
             cout << "Second Fragment:"
                  << endl << endl;

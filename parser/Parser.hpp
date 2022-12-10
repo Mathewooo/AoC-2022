@@ -34,6 +34,7 @@ public:
             cerr <<
                  "Error while opening input!"
                  << endl;
+            return;
         }
         _in = _getInput();
     }
@@ -43,6 +44,10 @@ public:
         for_each(in.begin(),
                  in.end(),
                  std::move(f));
+    }
+
+    auto getInput() -> vector<string> {
+        return _in;
     }
 
     T *getCache() {

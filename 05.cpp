@@ -79,7 +79,7 @@ class DayOne : Parser<TYPE> {
             _initStacks();
         }
 
-        TYPE editState() {
+        TYPE earlyState() {
             auto stacks {_stacks};
 
             for (const auto& instruction : _in.second) {
@@ -143,7 +143,7 @@ int main() {
     main.initStacks();
     main
       .cacheRes(main
-      .editState());
+      .earlyState());
     main.firstFragment();
     main
       .cacheRes(main

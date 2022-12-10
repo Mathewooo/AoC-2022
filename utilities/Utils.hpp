@@ -1,3 +1,5 @@
+#include <regex>
+
 namespace Hash {
     constexpr static int64_t getHash(const char* cp) {
         int64_t hash = 0;
