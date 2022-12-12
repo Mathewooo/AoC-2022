@@ -3,6 +3,11 @@
 #include "parser/Parser.hpp"
 #include "utilities/Utils.hpp"
 
+#define RIGHT 'R'
+#define LEFT 'L'
+#define UP 'U'
+#define DOWN 'D'
+
 using namespace std;
 using namespace Regex;
 
@@ -22,21 +27,21 @@ class DayNine : Parser<TYPE> {
             }; { edit(F); }
         }
 
-        auto _sign(int v) {
-            return (v > 0) - (v < 0);
-        }
-
         auto _moveHead(char cr, Pos& head) {
             switch (cr) {
-                case 'R':
+                case RIGHT:
                     ++head.first; break;
-                case 'L':
+                case LEFT:
                     --head.first; break;
-                case 'U':
+                case UP:
                     ++head.second; break;
-                case 'D':
+                case DOWN:
                     --head.second; break;
             }
+        }
+
+        auto _sign(int v) {
+            return (v > 0) - (v < 0);
         }
 
         auto _moveTail(const Pos &head, Pos &tail) {
